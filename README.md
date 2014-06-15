@@ -8,10 +8,12 @@ install
 
 放置代码在任意国外空间，如hongkong
 如果有空闲空间，可以在首页加入如下
+``
 if($_SERVER['HTTP_HOST']=='axx.com.cn'||$_SERVER['HTTP_HOST']=='www.axx.com.cn'){
     include 'search/home.html';
     exit();
 }
+``
 
 
 ### 免责申明
