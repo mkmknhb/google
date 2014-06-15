@@ -9,6 +9,7 @@ google proxy search web
 
 放置代码在任意国外空间，如hongkong
 如果有空闲空间，可以在首页加入如下
+
     if($_SERVER['HTTP_HOST']=='cctv.com'||$_SERVER['HTTP_HOST']=='www.cctv.com'){
         include 'search/home.html';
         exit();
