@@ -35,17 +35,6 @@ EOD;
     return $html.'<div style="display:none" ><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id=\'cnzz_stat_icon_1656292\'%3E%3C/span%3E%3Cscript src=\'" + cnzz_protocol + "s4.cnzz.com/stat.php%3Fid%3D1656292\' type=\'text/javascript\'%3E%3C/script%3E"));</script></div>';
 }
 
-function get_another($ukey){
-    $host = 'http://wwww.axx.com.cn';
-    $url = $host.'/search/?q='.$ukey;
-
-    if(isset($_GET['hl'])){
-        $query = http_build_query($_GET);
-        $url = $host.'/search?'.$query;
-    }
-    return $url;
-}
-
 /**
  * get google content
  * @param  string $ukey ukey
@@ -67,24 +56,12 @@ function get_content($ukey){
 
     if($con){ //备用
         $con = $con.get_counter();
-    }else{
-        $url = get_another($ukey);
-        if($ctx){
-            $con = @file_get_contents($url, false, $ctx);
-        }else{
-            $con = @file_get_contents($url);
-        }
     }
 
     if(!$con){
-        $url = 'http://202.86.162.26/search?q='.$ukey;
-        header('location:'.$url);
-        exit();
-        
         $con = 'google proxy server gfwed!';
     }
     return $con;
-    //return str_replace('google.com.hk', 'axx.com.cn', $con);
 }
 
 

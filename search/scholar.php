@@ -39,7 +39,6 @@ function get_content($url){
     }
 
     return $con.get_counter();
-    //return str_replace('google.com.hk', 'axx.com.cn', $con);
 }
 
 
