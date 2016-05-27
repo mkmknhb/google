@@ -1,27 +1,41 @@
-<?php
+<?
 
-/**
- * get iphone ua context
- * @return resource stream context
- */
 function get_mobile_context(){
     $ua = "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7";
     $opts = array(
       'http'=>array(
         'method'=>"GET",
-        'header'=>"Accept-language: en\r\n".
-                  "Cookie: foo=bar\r\n".
+        'header'=>"Host: www.google.com.hk\r\n".
+                  "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n".
+                  "Cookie: PREF=ID=50de7b4edeb386a9:U=0f2e91c4aedc306d:FF=1:LD=zh-CN\r\n".
+                  "Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3\r\n".
+                  "Connection: keep-alive\r\n".
+                  "Cache-Control: max-age=0\r\n".
                   "User-Agent: ".$ua."\r\n"
       )
     );
-    $context = stream_context_create($opts);
-    return $context;
+    $ctx = stream_context_create($opts);
+    return $ctx;
 }
 
-/**
- * check is mobile phone
- * @return boolean is mobile
- */
+function get_common_context(){
+    $ua = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0";
+    $opts = array(
+      'http'=>array(
+        'method'=>"GET",
+        'header'=>"Host: www.google.com.hk\r\n".
+                  "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n".
+                  "Cookie: PREF=ID=50de7b4edeb386a9:U=0f2e91c4aedc306d:FF=1:LD=zh-CN\r\n".
+                  "Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3\r\n".
+                  "Connection: keep-alive\r\n".
+                  "Cache-Control: max-age=0\r\n".
+                  "User-Agent: ".$ua."\r\n"
+      )
+    );
+    $ctx = stream_context_create($opts);
+    return $ctx;
+}
+
 function is_mobile(){
     switch(true){
         // Apple/iPhone browser renders as mobile

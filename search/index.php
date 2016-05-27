@@ -5,12 +5,40 @@ include 'functions.php';
  * get google query url
  * @return string url
  */
-function get_google_url(){
-    $keyword = isset($_GET['q']) ? $_GET['q'] : 'fuck';
-    $ukey = urlencode($keyword);
-
-    $host = 'http://www.google.com.tw';
+function get_google_url($ukey){
+    $host = 'http://www.google.com.hk';
     $url = $host.'/search?ie=utf-8&hl=zh-CN&gl=cn&source=hp&source=android-unknown&q='.$ukey;
+    if(isset($_GET['hl'])){
+        $query = http_build_query($_GET);
+        $url = $host.'/search?'.$query;
+    }
+    return $url;
+}
+
+function get_counter(){
+    $href_script = <<<EOD
+        var hrefs = document.getElementById("ires").getElementsByTagName("a"),
+            href = ""; 
+        for(var i=0, l=hrefs.length; i<l; i++){
+            href = hrefs[i].href.match(/\/url\?q=([^&#]*)(&|$)/);
+            if(href && href.length>1 && href[1]){
+                hrefs[i].href = decodeURIComponent(href[1]);
+            }
+        }
+        document.getElementById('logo').href="/";
+EOD;
+    //去除跳转链接
+    $html = '<script type="text/javascript">'.$href_script.'</script>';
+
+    //统计脚本
+    $html .= '<script type="text/javascript">(function(){var _glinks = document.getElementById("search").getElementsByTagName("a"); for(var i=0,l=_glinks.length; i<l; i++){_glinks[i].setAttribute("target", "_blank");} })();</script>';
+    return $html.'<div style="display:none" ><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id=\'cnzz_stat_icon_1656292\'%3E%3C/span%3E%3Cscript src=\'" + cnzz_protocol + "s4.cnzz.com/stat.php%3Fid%3D1656292\' type=\'text/javascript\'%3E%3C/script%3E"));</script></div>';
+}
+
+function get_another($ukey){
+    $host = 'http://wwww.axx.com.cn';
+    $url = $host.'/search/?q='.$ukey;
+
     if(isset($_GET['hl'])){
         $query = http_build_query($_GET);
         $url = $host.'/search?'.$query;
@@ -20,19 +48,56 @@ function get_google_url(){
 
 /**
  * get google content
- * @param  string $url url
+ * @param  string $ukey ukey
  * @return string content
  */
-function get_content($url){
+function get_content($ukey){
+    $url = get_google_url($ukey);
+
+    $ctx = false;
     if(is_mobile()){
         header('Content-Type:text/html;charset=utf-8');
         $ctx = get_mobile_context();
-        return file_get_contents($url, false, $ctx);
+        $con = @file_get_contents($url, false, $ctx);
     }else{
-        header('Content-Type:text/html;charset=gbk');
-        return file_get_contents($url);
+        header('Content-Type:text/html;charset=utf-8');
+        $ctx = get_common_context();
+        $con = @file_get_contents($url, false, $ctx);
     }
+
+    if($con){ //备用
+        $con = $con.get_counter();
+    }else{
+        $url = get_another($ukey);
+        if($ctx){
+            $con = @file_get_contents($url, false, $ctx);
+        }else{
+            $con = @file_get_contents($url);
+        }
+    }
+
+    if(!$con){
+        $url = 'http://202.86.162.26/search?q='.$ukey;
+        header('location:'.$url);
+        exit();
+        
+        $con = 'google proxy server gfwed!';
+    }
+    return $con;
+    //return str_replace('google.com.hk', 'axx.com.cn', $con);
 }
 
-$url = get_google_url();
-echo get_content($url);
+
+$keyword = isset($_GET['q']) ? trim($_GET['q']) : 'fuck';
+if(!$keyword){
+    return header('location:/');
+}
+
+if(substr($keyword, 0, 8)=='related:'){
+    echo 'fuck u!';
+    exit();
+}
+
+$ukey = urlencode($keyword);
+
+echo get_content($ukey);
