@@ -1,20 +1,20 @@
 google proxy search web
 ======
 
-本应用代码只用于学习研究，使用前三思而后行
-### 示例
-    不方便提供
+This application code is only for learning and research, please think twice before using it.
+### Example
+     Not convenient to provide
 
 ### install
 
-放置代码在任意国外空间，如hongkong
-如果有空闲空间，可以在首页加入如下
+Place the code in any foreign space, such as hongkong
+If you have free space, you can add the following to the homepage
 
-    if($_SERVER['HTTP_HOST']=='cctv.com'||$_SERVER['HTTP_HOST']=='www.cctv.com'){
-        include 'search/home.html';
-        exit();
-    }
+     if($_SERVER['HTTP_HOST']=='cctv.com'||$_SERVER['HTTP_HOST']=='www.cctv.com'){
+         include 'search/home.html';
+         exit();
+     }
 
 
-### 免责申明
-    该代码来源于无意识情况下开发，一切使用责任均与本人没有关系
+### Disclaimer
+     This code was developed unconsciously, and I have nothing to do with any responsibility for its use.
